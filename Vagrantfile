@@ -2,8 +2,9 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
-VM_NAME = 'Node-Postgres'
-HOSTNAME = 'dev.node.test'
+VM_NAME = 'Tether'
+HOSTNAME = 'dev.tether.lan'
+TLDS = [HOSTNAME, 'stream.tether.lan', 'stats.tether.lan']
 CPUS = 2
 RAM = 2048
 
@@ -12,11 +13,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "hashicorp/bionic64"
 
   config.landrush.enabled = true
-  config.landrush.tld = HOSTNAME
+  config.landrush.tld = TLDS
   config.landrush.guest_redirect_dns = false
   config.landrush.host_interface_excludes = [/lo[0-9]*/, /docker[0-9]+/, /veth[0-9]+/, /br-[0-9a-z]+/]
+  config.landrush.host HOSTNAME
+  config.landrush.host 'stream.tether.lan'
+  config.landrush.host 'stats.tether.lan'
 
   config.vm.hostname = HOSTNAME
+
+  config.vm.network :forwarded_port, guest: 5432, host: 5433
 
   if Vagrant::Util::Platform.windows?
     config.vm.synced_folder "./", "/vagrant", type: "smb"

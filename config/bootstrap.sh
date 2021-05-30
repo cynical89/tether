@@ -39,7 +39,14 @@ systemctl restart postgresql
 
 sudo su postgres -c "psql -c \"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\" "
 
-sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant nodedb"
+sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant tether"
+
+echo -e "\n\n====================================================="
+echo -e "\t Adding other dependencies"
+echo -e "=====================================================\n\n"
+
+add-apt-repository ppa:jonathonf/ffmpeg-4 -y
+apt -y install ffmpeg
 
 echo -e "\n\n====================================================="
 echo -e "\t Installing NGINX"
@@ -51,6 +58,12 @@ systemctl start nginx
 
 cp /vagrant/config/nginx/nodeapp.conf /etc/nginx/sites-available/nodeapp
 ln -s /etc/nginx/sites-available/nodeapp /etc/nginx/sites-enabled/nodeapp
+
+cp /vagrant/config/nginx/nodertmpbase.conf /etc/nginx/sites-available/nodertmpbase
+ln -s /etc/nginx/sites-available/nodertmpbase /etc/nginx/sites-enabled/nodertmpbase
+
+cp /vagrant/config/nginx/nodertmpapi.conf /etc/nginx/sites-available/nodertmpapi
+ln -s /etc/nginx/sites-available/nodertmpapi /etc/nginx/sites-enabled/nodertmpapi
 
 rm /etc/nginx/sites-enabled/default
 systemctl restart nginx
@@ -67,7 +80,7 @@ echo -e "\t Adding project to PM2"
 echo -e "=====================================================\n\n"
 
 # commented out for making things run on staging build - the hot reload works better this way
-pm2 start yarn --name "Node-Postgres" -- start
+pm2 start yarn --name "Tether" -- start
 pm2 save
 pm2 startup
 pm2 stop 0

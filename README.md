@@ -1,5 +1,5 @@
-# Node-Postgres-Vagrant
-a vagrant environment for node + postgresql in ubuntu 20. Provider is ESXi and Virtualbox
+# Tether
+A social media platform that will keep you tethered!
 
 ## Requires Landrush plugin
 
