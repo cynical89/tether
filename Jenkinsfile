@@ -11,7 +11,6 @@ pipeline {
     stage('install') {
       steps {
         sh 'yarn install --frozen-lockfile'
-        stash includes: 'node_modules', name: 'dependencies'
       }
     }
 
