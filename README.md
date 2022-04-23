@@ -1,6 +1,10 @@
 # Tether
 A social media platform that will keep you tethered!
 
+## Tech
+* Node.js 14.x
+* PostgreSQL
+
 ## Requires Landrush plugin
 
 ```
